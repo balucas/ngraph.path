@@ -428,6 +428,8 @@ function aStarPathSearch(graph, options) {
 
     var startNode = pool.createNewState(from);
     nodeState.set(fromId, startNode);
+    
+    var visitedLinks = [];
 
     // For the first node, fScore is completely heuristic.
     startNode.fScore = heuristic(from, to);
@@ -441,7 +443,10 @@ function aStarPathSearch(graph, options) {
 
     while (openSet.length > 0) {
       cameFrom = openSet.pop();
-      if (goalReached(cameFrom, to)) return reconstructPath(cameFrom);
+      if (goalReached(cameFrom, to)) return {
+        path: reconstructPath(cameFrom),
+        visited: visitedLinks
+      }
 
       // no need to visit this node anymore
       cameFrom.closed = true;
@@ -479,6 +484,9 @@ function aStarPathSearch(graph, options) {
       otherSearchState.distanceToSource = tentativeDistance;
       otherSearchState.fScore = tentativeDistance + heuristic(otherSearchState.node, to);
 
+      visitedLinks.push(cameFrom.node.id);
+      visitedLinks.push(otherNode.id);
+
       openSet.updateItem(otherSearchState.heapIndex);
     }
   }
@@ -496,7 +504,6 @@ function reconstructPath(searchState) {
     path.push(parent.node);
     parent = parent.parent;
   }
-
   return path;
 }
 
