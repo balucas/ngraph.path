@@ -119,6 +119,7 @@ function nba(graph, options) {
 
     // the `cameFrom` variable is accessed by both searches, so that we can store parents.
     var cameFrom;
+    var visitedLinks = [];
 
     // this is the main algorithm loop:
     while (open2Set.length && open1Set.length) {
@@ -132,7 +133,10 @@ function nba(graph, options) {
     }
 
     var path = reconstructPath(minNode);
-    return path; // the public API is over
+    return {
+      path: path, // the public API is over
+      visited: visitedLinks
+    }
 
     function forwardSearch() {
       cameFrom = open1Set.pop();
@@ -194,6 +198,8 @@ function nba(graph, options) {
       if (potentialMin < lMin) { 
         lMin = potentialMin;
         minNode = otherSearchState;
+        visitedLinks.push(cameFrom.node.id);
+        visitedLinks.push(otherNode.id);
       }
     }
 
@@ -222,6 +228,8 @@ function nba(graph, options) {
       if (potentialMin < lMin) {
         lMin = potentialMin;
         minNode = otherSearchState;
+        visitedLinks.push(cameFrom.node.id);
+        visitedLinks.push(otherNode.id);
       }
     }
 

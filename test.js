@@ -1,4 +1,5 @@
-var aStar = require('.').aStar;
+var aStar = require('.').nba;
+
 var createGraph = require('ngraph.graph');
 
 let graph = createGraph();

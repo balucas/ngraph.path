@@ -227,6 +227,7 @@ function aStarBi(graph, options) {
 
     var currentSet = openSetFrom;
     var currentOpener = BY_FROM;
+    var visitedLInks = [];
 
     while (openSetFrom.length > 0 && openSetTo.length > 0) {
       if (openSetFrom.length < openSetTo.length) {
@@ -250,7 +251,10 @@ function aStarBi(graph, options) {
       if (minFrom && minTo) {
         // This is not necessary the best path, but we are so greedy that we
         // can't resist:
-        return reconstructBiDirectionalPath(minFrom, minTo);
+        return {
+          path: reconstructBiDirectionalPath(minFrom, minTo),
+          visited: visitedLinks
+        }
       }
     }
 
@@ -349,6 +353,9 @@ function aStarBi(graph, options) {
       // bingo! we found shorter path:
       otherSearchState.parent = cameFrom;
       otherSearchState.distanceToSource = tentativeDistance;
+      
+      visitedLInks.push(cameFrom.node.id);
+      visitedLInks.push(otherNode.id);
     }
   }
 }
